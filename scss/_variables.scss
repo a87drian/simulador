@@ -1,0 +1,27 @@
+$verde:#025930;
+$verdeOscuro:#062620;
+$verdeAgua:#05F283;
+$height: 100px;
+@mixin sizes($width, $height) {
+    height: $height;
+    width: $width;
+}
+
+.header {
+    background-color: $verde;
+    @include sizes(100%, 50px);
+
+
+}
+.main {
+    background-color: $verdeAgua ;
+    width: 100%;
+    @include sizes(100%, 500px);
+
+}
+.footer {
+    background-color: $verdeOscuro;
+    width: 100%;
+    @include sizes(100%, 50px);
+
+}
