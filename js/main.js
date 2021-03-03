@@ -56,6 +56,7 @@ function ingresarEquipo() {
 //crear canchas
 function crearCancha(){
     turnos = [];
+    //la variable dia iria un dia pero como no se como se hace una variable datetime la deje asi
     turnos.push(new Turno(dia,17,18));
     turnos.push(new Turno(dia,18,19));
     
