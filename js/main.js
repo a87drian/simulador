@@ -3,11 +3,11 @@ class Equipo {
         this.validarNombre(nombre);
     }
     validarNombre(nombre) {
-        let nombreTrim = nuevoNombre.trim();
-         if (nombreTrim.length > 2){
-             this.nombre = nombreTrim;
+        let nombreTrim = nombre.trim();
+        if (nombreTrim.length > 2) {
+            this.nombre = nombreTrim;
 
-         }
+        }
     }
 
 }
@@ -31,7 +31,10 @@ entrada = ingresarEquipo();
 if (entrada.length < 1) {
     alert("Debe ingresar al menos dos equipos");
 } else {
-    alert("ingresó " + entrada + " equipos")
+    for (const equipo of entrada) {
+        alert("ingresó " + equipo.nombre + " equipos")
+
+    }
 }
 //elegir dia y horario
 //mostrar canchas disponibles 
@@ -54,11 +57,11 @@ function ingresarEquipo() {
 }
 
 //crear canchas
-function crearCancha(){
+function crearCancha() {
     turnos = [];
     //la variable dia iria un dia pero como no se como se hace una variable datetime la deje asi
-    turnos.push(new Turno(dia,17,18));
-    turnos.push(new Turno(dia,18,19));
-    
+    turnos.push(new Turno(dia, 17, 18));
+    turnos.push(new Turno(dia, 18, 19));
+
     const cancha1 = new Cancha(1, turnos);
 }
