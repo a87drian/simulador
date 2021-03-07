@@ -1,6 +1,23 @@
+//#region DECLARACION DE LAS CLASES
+
+class Jugador {
+    constructor(nombre,/* equipo,*/ capitan) {
+        this.validarNombre(nombre);
+        this.capitan = capitan;
+    }
+    validarNombre(nombre) {
+        
+        console.log(nombre);
+        if (nombre.length > 3) {
+            this.nombre = nombre.toUpperCase();
+        }
+    }
+}
+
 class Equipo {
     constructor(nombre) {
         this.validarNombre(nombre);
+        //jugadores = [];
     }
     validarNombre(nombre) {
         let nombreTrim = nombre.trim();
@@ -8,6 +25,10 @@ class Equipo {
             this.nombre = nombreTrim;
 
         }
+    }
+    addJugadores(jugadores) {
+        console.log(jugadores);
+        this.jugadores = jugadores;
     }
 
 }
@@ -26,35 +47,60 @@ class Cancha {
     }
 
 }
-//ingresar equipo tiene que haber mas de un equipo
-entrada = ingresarEquipo();
-if (entrada.length < 1) {
-    alert("Debe ingresar al menos dos equipos");
-} else {
-    for (const equipo of entrada) {
-        alert("ingresó " + equipo.nombre + " equipos")
+//#endregion
 
-    }
+//#region MAIN
+
+//ingresar equipo tiene que haber mas de un equipo
+let equipo = ingresarEquipo();
+let jugadores = [];
+for (let index = 0; index < 3; index++) {
+    jugadores.push(ingresarJugadores(equipo))
 }
+
+equipo.addJugadores(jugadores);
+
+console.log(equipo.jugadores);
+
+alert("En el equipo " + equipo.nombre + "Juegan" + equipo.jugadores.nombre.join(', '));
+
+
+//#endregion
+
 //elegir dia y horario
 //mostrar canchas disponibles 
 //agendar turno
 
 function ingresarEquipo() {
     let entrada = prompt("Ingresar Nombre de los Equipos o q para continuar");
-    let equipos = [];
+    let equipo;
 
-    while (entrada != "q") {
-        if (entrada.length != 0) {
-            let equipo = new Equipo(entrada);
-            equipos.push(equipo);
+    // while (entrada != "q") {
+    if (entrada.length != 0) {
+        equipo = new Equipo(entrada);
+        // equipos.push(equipo);
 
-        }
-
-        entrada = prompt("Ingresar Nombre de los Equipos o q para continuar");
+        // }
     }
-    return equipos;
+    return equipo;
 }
+
+function ingresarJugadores(equipo) {
+    let entrada = prompt("Ingresar Jugador para equipo " + equipo.nombre ) 
+        if (entrada.length != 0) {
+            let capitan = prompt("Es Capitan: S o N");
+            if (capitan == "S") {
+                jugador = new Jugador(entrada, true );
+        
+            }
+            else {
+                jugador = new Jugador(entrada, false );
+
+            }
+        }
+    }
+
+
 
 //crear canchas
 function crearCancha() {
