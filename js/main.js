@@ -55,14 +55,21 @@ class Cancha {
 let equipo = ingresarEquipo();
 let jugadores = [];
 for (let index = 0; index < 3; index++) {
-    jugadores.push(ingresarJugadores(equipo))
+    jugadores.push(ingresarJugadores(equipo));
+}
+console.log(jugadores);
+let jugadoresS = [];
+for (const jugador in jugadores) {
+    jugadoresS.push(jugadores[jugador]);
+
 }
 
 equipo.addJugadores(jugadores);
 
 console.log(equipo.jugadores);
 
-alert("En el equipo " + equipo.nombre + "Juegan" + equipo.jugadores.nombre.join(', '));
+// alert("En el equipo " + equipo.nombre + "Juegan" + equipo.jugadores.nombre.join(', '));
+alert("En el equipo " + equipo.nombre + " Juegan " + jugadoresS.toString());
 
 
 //#endregion
