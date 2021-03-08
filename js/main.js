@@ -70,6 +70,8 @@ console.log(equipo.jugadores);
 
 // alert("En el equipo " + equipo.nombre + "Juegan" + equipo.jugadores.nombre.join(', '));
 alert("En el equipo " + equipo.nombre + " Juegan " + jugadoresS.toString());
+let capitan = jugadores.find(jugador => jugador.capitan === true);
+alert("El Capitan es " + capitan.nombre);
 
 
 //#endregion
