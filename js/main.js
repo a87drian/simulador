@@ -27,7 +27,6 @@ class Equipo {
         }
     }
     addJugadores(jugadores) {
-        console.log(jugadores);
         this.jugadores = jugadores;
     }
 
@@ -57,21 +56,34 @@ let jugadores = [];
 for (let index = 0; index < 3; index++) {
     jugadores.push(ingresarJugadores(equipo));
 }
-console.log(jugadores);
-let jugadoresS = [];
-for (const jugador in jugadores) {
-    jugadoresS.push(jugadores[jugador]);
 
-}
+ let jugadoresS = [];
+ for (let index = 0; index < jugadores.length; index++) {
+    jugadoresS.push( jugadores[index].nombre);
+     
+ }
 
 equipo.addJugadores(jugadores);
 
-console.log(equipo.jugadores);
 
 // alert("En el equipo " + equipo.nombre + "Juegan" + equipo.jugadores.nombre.join(', '));
-alert("En el equipo " + equipo.nombre + " Juegan " + jugadoresS.toString());
-let capitan = jugadores.find(jugador => jugador.capitan === true);
-alert("El Capitan es " + capitan.nombre);
+let padre = document.getElementById("ListaJugadores");
+let titulo = document.getElementById("titulo");
+let nombre = document.createTextNode("En el equipo " + equipo.nombre + " juegan:");
+titulo.appendChild(nombre);
+
+
+let lista = document.createElement("ul");
+ 
+for(const jugador of jugadores){
+    lista.innerHTML = lista.innerHTML + "<li>"+ jugador.nombre + "</li>";
+
+}
+padre.appendChild(lista);
+// alert("En el equipo " + equipo.nombre + " Juegan " + jugadoresS.toString());
+// let capitan = jugadores.find(jugador => jugador.capitan === true);
+console.log(jugadores.filter(jugador => jugador.capitan === true));
+// alert("El Capitan es " + capitan.nombre);
 
 
 //#endregion
@@ -97,8 +109,8 @@ function ingresarEquipo() {
 function ingresarJugadores(equipo) {
     let entrada = prompt("Ingresar Jugador para equipo " + equipo.nombre ) 
         if (entrada.length != 0) {
-            let capitan = prompt("Es Capitan: S o N");
-            if (capitan == "S") {
+            let capitan = prompt("Es Capitan: s o n");
+            if (capitan == "s") {
                 jugador = new Jugador(entrada, true );
         
             }
@@ -107,6 +119,7 @@ function ingresarJugadores(equipo) {
 
             }
         }
+        return jugador;
     }
 
 
