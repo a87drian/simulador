@@ -1,12 +1,13 @@
 //#region DECLARACION DE LAS CLASES
 
 class Jugador {
-    constructor(nombre,/* equipo,*/ capitan) {
-        this.validarNombre(nombre);
+    constructor(nombre, /* equipo,*/ capitan) {
+        //this.nombre = this.validarNombre(nombre); revisar porque no anda
+        this.nombre = nombre;
         this.capitan = capitan;
     }
     validarNombre(nombre) {
-        
+
         console.log(nombre);
         if (nombre.length > 3) {
             this.nombre = nombre.toUpperCase();
@@ -50,36 +51,64 @@ class Cancha {
 
 //#region MAIN
 
-//ingresar equipo tiene que haber mas de un equipo
-let equipo = ingresarEquipo();
-let jugadores = [];
-for (let index = 0; index < 3; index++) {
-    jugadores.push(ingresarJugadores(equipo));
+let divEquipo = document.getElementById("equipo");
+let boton = document.getElementById("boton");
+boton.innerHTML = "Ingresar Equipo";
+
+let equipo;
+boton.onclick = () => {
+    equipo = ingresarEquipo();
+    crearInputJugadores();
+
+
 }
 
- let jugadoresS = [];
- for (let index = 0; index < jugadores.length; index++) {
-    jugadoresS.push( jugadores[index].nombre);
-     
- }
 
-equipo.addJugadores(jugadores);
+function crearInputJugadores() {
+    //let jugadores = [];
+    let divGenerado = document.createElement("div");
+    divGenerado.innerHTML = "<h1>Ingresar Jugadores</h1>"
+
+    for (let index = 0; index < 3; index++) {
+
+        // jugadores.push(ingresarJugadores(equipo));
+        divGenerado.innerHTML += "<input type='text' id='jugador" + index + "'>";
+
+
+    }
+    divGenerado.innerHTML += "<button id='botonJugador'>Ingrese Jugadores</button>"
+    divEquipo.appendChild(divGenerado);
+    let botonJugador = document.getElementById("botonJugador");
+    botonJugador.onclick = () => {
+        let jugadores = [];
+        jugadores = ingresarJugadores(equipo);
+        console.log(jugadores);
+
+        equipo.addJugadores(jugadores);
+        let padre = document.getElementById("ListaJugadores");
+        let titulo = document.getElementById("titulo");
+        let nombre = document.createTextNode("En el equipo " + equipo.nombre + " juegan:");
+        titulo.appendChild(nombre);
+
+
+        let lista = document.createElement("ul");
+
+        for (i = 0; i < jugadores.length; i++) {
+         
+            lista.innerHTML = lista.innerHTML + "<li>" + jugadores[i].nombre + "</li>";
+
+        }
+        padre.appendChild(lista);
+
+
+    }
+}
+
+//equipo.addJugadores(jugadores);
 
 
 // alert("En el equipo " + equipo.nombre + "Juegan" + equipo.jugadores.nombre.join(', '));
-let padre = document.getElementById("ListaJugadores");
-let titulo = document.getElementById("titulo");
-let nombre = document.createTextNode("En el equipo " + equipo.nombre + " juegan:");
-titulo.appendChild(nombre);
 
-
-let lista = document.createElement("ul");
- 
-for(const jugador of jugadores){
-    lista.innerHTML = lista.innerHTML + "<li>"+ jugador.nombre + "</li>";
-
-}
-padre.appendChild(lista);
 // alert("En el equipo " + equipo.nombre + " Juegan " + jugadoresS.toString());
 // let capitan = jugadores.find(jugador => jugador.capitan === true);
 console.log(jugadores.filter(jugador => jugador.capitan === true));
@@ -93,8 +122,12 @@ console.log(jugadores.filter(jugador => jugador.capitan === true));
 //agendar turno
 
 function ingresarEquipo() {
-    let entrada = prompt("Ingresar Nombre de los Equipos o q para continuar");
+    // let entrada = prompt("Ingresar Nombre de los Equipos o q para continuar");
+
+    let entrada = document.getElementById("datos").value;
+    let but = document.getElementById("boton");
     let equipo;
+
 
     // while (entrada != "q") {
     if (entrada.length != 0) {
@@ -103,24 +136,27 @@ function ingresarEquipo() {
 
         // }
     }
+    console.log(equipo);
     return equipo;
 }
 
 function ingresarJugadores(equipo) {
-    let entrada = prompt("Ingresar Jugador para equipo " + equipo.nombre ) 
-        if (entrada.length != 0) {
-            let capitan = prompt("Es Capitan: s o n");
-            if (capitan == "s") {
-                jugador = new Jugador(entrada, true );
-        
-            }
-            else {
-                jugador = new Jugador(entrada, false );
+    let jugador = [];
 
-            }
-        }
-        return jugador;
+
+    for (let index = 0; index < 3; index++) {
+        let id = "jugador" + index;
+        //console.log(document.getElementById(id).value);
+
+
+
+        jugador.push(new Jugador(document.getElementById(id).value, false));
+
+
+
     }
+    return jugador;
+}
 
 
 
