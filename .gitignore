@@ -1,1 +1,5 @@
 node_modules/
+js/bootstrap.*
+css/bootstrap*
+js/prueba.html
+js/jquery-3.6.0.min.js
