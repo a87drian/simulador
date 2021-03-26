@@ -18,7 +18,7 @@ class Jugador {
 class Equipo {
     constructor(nombre) {
         this.validarNombre(nombre);
-        //jugadores = [];
+        this.jugadores = [];
     }
     validarNombre(nombre) {
         let nombreTrim = nombre.trim();
@@ -27,8 +27,9 @@ class Equipo {
 
         }
     }
-    addJugadores(jugadores) {
-        this.jugadores = jugadores;
+    addJugadores(player) {
+       
+        this.jugadores.push(player);
     }
 
 }
@@ -54,127 +55,127 @@ class Cancha {
 // let divEquipo = document.getElementById("equipo");
 // let boton = document.getElementById("boton");
 // boton.innerHTML = "Ingresar Equipo";
-$('#boton').append("Ingresar Equipo");
-
+$('#equipo').append(`<div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Equipo:</span>
+                        </div>
+                        <input type="text" id="datos" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <button type="button" id="boton" class="btn btn-dark">Ingresar Equipo</button>
+                    `);
 
 let equipo;
-boton.onclick = () => {
+$('#boton').on('click', function () {
     equipo = ingresarEquipo();
-    crearInputJugadores();
+    crearInputJugadores(equipo);
+    $('#equipo').hide();
+});
 
 
+function crearInputJugadores(equipo) {
+
+    $('#jugadores').append(`<p class="h1">Ingresar Jugadores de ${equipo.nombre}</p>`);
+
+    InputJugadores();
+        
+    $('#botonJugador').on('click' , () => {
+        let jugadores = [];
+        
+        ingresarJugadores(equipo, $('#inputJugador').val());
+        
+        $('#inputJugador').val("");
+        
+
+        for (i = 0; i < jugadores.length; i++) {
+
+            $('#ListaJugadores').append("<li>" + jugadores[i].nombre + "</li>");
+
+        }
+
+    });
+    $('#terminar').on('click', () => {  
+        let uls = "";
+        console.log(equipo.jugadores);
+
+        for (let i = 0; i < equipo.jugadores.length; i++) {
+            
+            uls += `<ul>${equipo.jugadores[i].nombre}</ul>`; 
+            
+        }
+        
+
+        $('#mostrar_equipo').append(`<div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
+                                        <div class="card-header">${equipo.nombre}</div>
+                                             <div class="card-body">
+                                                 <p class="card-text">
+                                                 <li class="list-group-item list-group-item-warning">
+                                                    ${uls}
+                                                 </li></p>
+                                             </div>
+                                        </div>`);
+                
+
+    });
+}
+function InputJugadores() {
+    $('#jugadores').append(`<div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Jugador:</span>
+                                </div>
+                             <input type="text" id="inputJugador" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                             </div>
+                            <button type="button" id="botonJugador" class="btn btn-dark">Ingresar Jugador</button>
+                            <button type="button" id="terminar" class="btn btn-dark">Terminar</button>
+                            `);
+        
+    
 }
 
 
-function crearInputJugadores() {
-    //let jugadores = [];
-    // let divGenerado = document.createElement("div");
-    // divGenerado.innerHTML = "<h1>Ingresar Jugadores</h1>"
-    $('#equipo').append('<div><h1>Ingresar Jugadores</h1></div>');
+console.log(jugadores.filter(jugador => jugador.capitan === true));
+// alert("El Capitan es " + capitan.nombre);
 
 
-    for (let index = 0; index < 3; index++) {
+//#endregion
 
-        // jugadores.push(ingresarJugadores(equipo));
-        // divGenerado.innerHTML += "<input type='text' id='jugador" + index + "'>";
-          $('#equipo').append("<input type='text' id='jugador" + index +  "'>");
+//elegir dia y horario
+//mostrar canchas disponibles 
+//agendar turno
 
+function ingresarEquipo() {
+    // let entrada = prompt("Ingresar Nombre de los Equipos o q para continuar");
 
-        }
-        $('#equipo').append("<button id='botonJugador'>Ingrese Jugadores</button>");
-        // divEquipo.appendChild(divGenerado);
+    let entrada = document.getElementById("datos").value;
+    let but = document.getElementById("boton");
+    let equipo;
 
-        let botonJugador = document.getElementById("botonJugador");
-        botonJugador.onclick = () => {
-            let jugadores = [];
-            jugadores = ingresarJugadores(equipo);
-            console.log(jugadores);
+    // while (entrada != "q") {
+    if (entrada.length != 0) {
+        equipo = new Equipo(entrada);
+        // equipos.push(equipo);
 
-            equipo.addJugadores(jugadores);
-
-            // let padre = document.getElementById("ListaJugadores");
-            // let titulo = document.getElementById("titulo");
-            // let nombre = document.createTextNode("En el equipo " + equipo.nombre + " juegan:");
-            $('#titulo').append("En el equipo " + equipo.nombre + " juegan:")
-            // titulo.appendChild(nombre);
-
-
-            // let lista = document.createElement("ul");
-
-            for (i = 0; i < jugadores.length; i++) {
-
-                // lista.innerHTML = lista.innerHTML + "<li>" + jugadores[i].nombre + "</li>";
-                $('#ListaJugadores').append("<li>" + jugadores[i].nombre +"</li>");
-
-            }
-            // padre.appendChild(lista);
-
-
-        }
+        // }
     }
+    console.log(equipo);
+    return equipo;
+}
 
-    //equipo.addJugadores(jugadores);
+function ingresarJugadores(equipo, jugadorNombre) {
+//    const jugador = [];
 
-
-    // alert("En el equipo " + equipo.nombre + "Juegan" + equipo.jugadores.nombre.join(', '));
-
-    // alert("En el equipo " + equipo.nombre + " Juegan " + jugadoresS.toString());
-    // let capitan = jugadores.find(jugador => jugador.capitan === true);
-    console.log(jugadores.filter(jugador => jugador.capitan === true));
-    // alert("El Capitan es " + capitan.nombre);
-
-
-    //#endregion
-
-    //elegir dia y horario
-    //mostrar canchas disponibles 
-    //agendar turno
-
-    function ingresarEquipo() {
-        // let entrada = prompt("Ingresar Nombre de los Equipos o q para continuar");
-
-        let entrada = document.getElementById("datos").value;
-        let but = document.getElementById("boton");
-        let equipo;
-
-
-        // while (entrada != "q") {
-        if (entrada.length != 0) {
-            equipo = new Equipo(entrada);
-            // equipos.push(equipo);
-
-            // }
-        }
-        console.log(equipo);
-        return equipo;
-    }
-
-    function ingresarJugadores(equipo) {
-        let jugador = [];
-
-
-        for (let index = 0; index < 3; index++) {
-            let id = "jugador" + index;
-            //console.log(document.getElementById(id).value);
+        equipo.addJugadores(new Jugador(jugadorNombre, false));
+        console.log(new Jugador(jugadorNombre, false));
+    //return jugador;
+}
 
 
 
-            jugador.push(new Jugador(document.getElementById(id).value, false));
+//crear canchas
+function crearCancha() {
+    turnos = [];
+    //la variable dia iria un dia pero como no se como se hace una variable datetime la deje asi
+    turnos.push(new Turno(dia, 17, 18));
+    turnos.push(new Turno(dia, 18, 19));
 
-
-
-        }
-        return jugador;
-    }
-
-
-
-    //crear canchas
-    function crearCancha() {
-        turnos = [];
-        //la variable dia iria un dia pero como no se como se hace una variable datetime la deje asi
-        turnos.push(new Turno(dia, 17, 18));
-        turnos.push(new Turno(dia, 18, 19));
-
-        const cancha1 = new Cancha(1, turnos);
-    }
+    const cancha1 = new Cancha(1, turnos);
+}

@@ -2,11 +2,20 @@ $verde:#025930;
 $verdeOscuro:#062620;
 $verdeAgua:#05F283;
 $height: 100px;
+
 @mixin sizes($width, $height) {
     height: $height;
     width: $width;
 }
-
+@mixin margin($top, $bottom, $left, $right ){
+    margin-top: $top;
+    margin-bottom: $bottom;
+    margin-left: $left;
+    margin-right: $right;
+}
+body{
+    background-color: $verdeAgua;
+}
 .header {
     background-color: $verde;
     @include sizes(100%, 50px);
@@ -17,11 +26,16 @@ $height: 100px;
     background-color: $verdeAgua ;
     width: 100%;
     @include sizes(100%, 500px);
+    @include margin(5%,0 ,0 ,0 )
 
 }
 .footer {
     background-color: $verdeOscuro;
     width: 100%;
     @include sizes(100%, 50px);
+    @include margin(100%,0 ,0 ,0 )
 
+}
+#card{
+    @include margin(20px , 0, 0, 0)
 }
