@@ -28,7 +28,7 @@ class Equipo {
         }
     }
     addJugadores(player) {
-       
+
         this.jugadores.push(player);
     }
 
@@ -65,26 +65,47 @@ $('#equipo').append(`<div class="input-group mb-3">
                     `);
 
 let equipo;
+const equipos = [];
+console.log(document.URL);
+
 $('#boton').on('click', function () {
     equipo = ingresarEquipo();
-    crearInputJugadores(equipo);
-    $('#equipo').hide();
+    equipos.push(equipo);
+    mostarEquipos(equipos);
+    sessionStorage.setItem('eqIngresados', JSON.stringify(equipos));
+    $('#datos').val('');
+    //$('#equipo').hide();
 });
 
+if (location.href.includes("jugadores.html")) {
+    let eqs = JSON.parse(sessionStorage.getItem('eqIngresados'));
 
-function crearInputJugadores(equipo) {
+    for (const eq of eqs) {
+        console.log(eq.nombre);
+        equipos.push(new Equipo(eq.nombre, eq.jugadores));
+    }
 
-    $('#jugadores').append(`<p class="h1">Ingresar Jugadores de ${equipo.nombre}</p>`);
+    mostarEquiposJ(equipos);
+
+
+    //crearInputJugadores(equipos);
+
+
+}
+
+
+
+function crearInputJugadores(equipos) {
 
     InputJugadores();
-        
-    $('#botonJugador').on('click' , () => {
+
+    $('#botonJugador').on('click', () => {
         let jugadores = [];
-        
+
         ingresarJugadores(equipo, $('#inputJugador').val());
-        
+
         $('#inputJugador').val("");
-        
+
 
         for (i = 0; i < jugadores.length; i++) {
 
@@ -93,30 +114,62 @@ function crearInputJugadores(equipo) {
         }
 
     });
-    $('#terminar').on('click', () => {  
+    $('#terminar').on('click', () => {
         let uls = "";
         console.log(equipo.jugadores);
 
         for (let i = 0; i < equipo.jugadores.length; i++) {
-            
-            uls += `<ul>${equipo.jugadores[i].nombre}</ul>`; 
-            
-        }
-        
 
-        $('#mostrar_equipo').append(`<div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
-                                        <div class="card-header">${equipo.nombre}</div>
-                                             <div class="card-body">
-                                                 <p class="card-text">
-                                                 <li class="list-group-item list-group-item-warning">
-                                                    ${uls}
-                                                 </li></p>
-                                             </div>
-                                        </div>`);
-                
+            uls += `<ul>${equipo.jugadores[i].nombre}</ul>`;
+
+        }
+
 
     });
 }
+
+function mostarEquipos(equipos) {
+    console.log("mostrar equipos");
+    //for (const equipo of equipos) {
+    $('#mostrar_equipo').append(`<div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
+                                        <div class="card-header">${equipo.nombre}</div>
+                                             <div class="card-body">
+                                                 <p class="card-text">                                         
+                                             </div>
+                                        </div>`);
+
+    //}   
+    /*        <li class="list-group-item list-group-item-warning">
+                                                    ${uls}
+                                                 </li></p> */
+}
+
+function mostarEquiposJ(equipos) {
+    
+    for (const equipo of equipos) {
+        $('#agregar_jugadores').append(`<div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
+                                        <div class="card-header"><h1>${equipo.nombre.toUpperCase()}</h1></div>
+                                             <div class="card-body">
+                                                <button type="button" id="botonJugador-${equipo.nombre}" class="btn btn-dark">Agregar Jugador</button>
+                                                <p class="card-text"></p>
+                                             </div>
+                                        </div>`);
+    
+    $(`botonJugador-${equipo.nombre}`).on('click', function() {
+        equipo.jugadores.push(new Jugador('adrian', true));
+        console.log(equipo.jugadores);
+    });
+    }
+}
+
+
+
+/*        <li class="list-group-item list-group-item-warning">
+                                                ${uls}
+                                             </li></p> */
+
+
+
 function InputJugadores() {
     $('#jugadores').append(`<div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -127,12 +180,12 @@ function InputJugadores() {
                             <button type="button" id="botonJugador" class="btn btn-dark">Ingresar Jugador</button>
                             <button type="button" id="terminar" class="btn btn-dark">Terminar</button>
                             `);
-        
-    
+
+
 }
 
 
-console.log(jugadores.filter(jugador => jugador.capitan === true));
+//console.log(jugadores.filter(jugador => jugador.capitan === true));
 // alert("El Capitan es " + capitan.nombre);
 
 
@@ -149,22 +202,24 @@ function ingresarEquipo() {
     let but = document.getElementById("boton");
     let equipo;
 
+    console.log(entrada.length != 0);
     // while (entrada != "q") {
+
     if (entrada.length != 0) {
         equipo = new Equipo(entrada);
         // equipos.push(equipo);
 
         // }
     }
-    console.log(equipo);
+
     return equipo;
 }
 
 function ingresarJugadores(equipo, jugadorNombre) {
-//    const jugador = [];
+    //    const jugador = [];
 
-        equipo.addJugadores(new Jugador(jugadorNombre, false));
-        console.log(new Jugador(jugadorNombre, false));
+    equipo.addJugadores(new Jugador(jugadorNombre, false));
+    console.log(new Jugador(jugadorNombre, false));
     //return jugador;
 }
 
