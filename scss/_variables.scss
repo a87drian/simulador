@@ -39,3 +39,6 @@ body{
 #card{
     @include margin(20px , 0, 0, 0)
 }
+.mostrar_equipo{
+    @include margin(20px, 20px, 20px, 20px);
+}

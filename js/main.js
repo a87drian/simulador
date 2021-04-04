@@ -48,6 +48,7 @@ class Cancha {
     }
 
 }
+
 //#endregion
 
 //#region MAIN
@@ -72,12 +73,16 @@ $('#boton').on('click', function () {
     equipo = ingresarEquipo();
     equipos.push(equipo);
     mostarEquipos(equipos);
+    $('#carta').hide();
+    $('#carta').fadeIn(1000);
+
     sessionStorage.setItem('eqIngresados', JSON.stringify(equipos));
     $('#datos').val('');
     //$('#equipo').hide();
 });
 
 if (location.href.includes("jugadores.html")) {
+
     let eqs = JSON.parse(sessionStorage.getItem('eqIngresados'));
 
     for (const eq of eqs) {
@@ -87,13 +92,34 @@ if (location.href.includes("jugadores.html")) {
 
     mostarEquiposJ(equipos);
 
-
     //crearInputJugadores(equipos);
 
 
 }
+if (location.href.includes("campeonato.html")) {
+
+    let eqs = JSON.parse(sessionStorage.getItem('eqIngresados'));
+
+    for (const eq of eqs) {
+        console.log(eq.nombre);
+        equipos.push(new Equipo(eq.nombre, eq.jugadores));
+    }
+    $('#armar_campeonato').click(function (e) {
+        console.log(e);
+        $('#armar_campeonato').attr("disabled", true);
+
+        armarCampeonato(equipos, equipos);
+        $('#mostrar_campeonato').fadeOut("slow", function () {
+            //Cuando termina de ocultarse el elemento lo mostramos nuevamente
+            $("#mostrar_campeonato").fadeIn(1000);
+        });
+
+    });
 
 
+
+}
+//#endregion
 
 function crearInputJugadores(equipos) {
 
@@ -129,37 +155,53 @@ function crearInputJugadores(equipos) {
 }
 
 function mostarEquipos(equipos) {
-    console.log("mostrar equipos");
-    //for (const equipo of equipos) {
-    $('#mostrar_equipo').append(`<div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
-                                        <div class="card-header">${equipo.nombre}</div>
+
+    $('#mostrar_equipo').append(`<div class="card text-white bg-warning mb-3" id="carta" style="max-width: 18rem;">
+                                        <div class="card-header">${equipo.nombre.toUpperCase()}</div>
                                              <div class="card-body">
                                                  <p class="card-text">                                         
                                              </div>
                                         </div>`);
-
-    //}   
-    /*        <li class="list-group-item list-group-item-warning">
-                                                    ${uls}
-                                                 </li></p> */
 }
 
 function mostarEquiposJ(equipos) {
-    
+
     for (const equipo of equipos) {
+
         $('#agregar_jugadores').append(`<div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
                                         <div class="card-header"><h1>${equipo.nombre.toUpperCase()}</h1></div>
                                              <div class="card-body">
+                                             <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-default">Jugador:</span>
+                                                 </div>
+                                                <input type="text" id="inputJugador-${equipo.nombre}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                                </div>
                                                 <button type="button" id="botonJugador-${equipo.nombre}" class="btn btn-dark">Agregar Jugador</button>
                                                 <p class="card-text"></p>
+                                                <ul class="list-group" id="lista-jugadores-${equipo.nombre}">
+                                                </ul>
                                              </div>
                                         </div>`);
-    
-    $(`botonJugador-${equipo.nombre}`).on('click', function() {
-        equipo.jugadores.push(new Jugador('adrian', true));
-        console.log(equipo.jugadores);
-    });
+        $(`#botonJugador-${equipo.nombre}`).on('click', function () {
+            if ($(`#inputJugador-${equipo.nombre}`).val().length != 0) {
+                $(`#lista-jugadores-${equipo.nombre}`).append(agregarJugadorEquipo(equipo, $(`#inputJugador-${equipo.nombre}`).val()));
+                $("li").fadeIn();
+                $(`#inputJugador-${equipo.nombre}`).val("");
+            }
+        });
+
     }
+    console.log(btn);
+
+}
+
+function agregarJugadorEquipo(equipo, jugador) {
+
+    equipo.jugadores.push(new Jugador(jugador, false));
+    return `<li class="list-group-item list-group-item-warning">${jugador}</li>`
+
+
 }
 
 
@@ -185,15 +227,6 @@ function InputJugadores() {
 }
 
 
-//console.log(jugadores.filter(jugador => jugador.capitan === true));
-// alert("El Capitan es " + capitan.nombre);
-
-
-//#endregion
-
-//elegir dia y horario
-//mostrar canchas disponibles 
-//agendar turno
 
 function ingresarEquipo() {
     // let entrada = prompt("Ingresar Nombre de los Equipos o q para continuar");
@@ -201,9 +234,6 @@ function ingresarEquipo() {
     let entrada = document.getElementById("datos").value;
     let but = document.getElementById("boton");
     let equipo;
-
-    console.log(entrada.length != 0);
-    // while (entrada != "q") {
 
     if (entrada.length != 0) {
         equipo = new Equipo(entrada);
@@ -233,4 +263,64 @@ function crearCancha() {
     turnos.push(new Turno(dia, 18, 19));
 
     const cancha1 = new Cancha(1, turnos);
+}
+
+function armarCampeonato(listaEquipos1, listaEquipos2) {
+
+    let cant_encuentros_por_fecha = listaEquipos1.length / 2;
+    cant_encuentros_por_fecha = Math.floor(cant_encuentros_por_fecha);
+    if (cant_encuentros_por_fecha % 2 == 0) {
+        cant_fechas = (listaEquipos1.length * (listaEquipos1.length - 1)) / 2;
+        let o = 0;
+        console.log(cant_encuentros_por_fecha);
+
+
+
+        for (let i = 0; i < cant_fechas; i++) {
+            let fecha = i + 1;
+            console.log("fecha " + fecha);
+
+
+            let list = "";
+            while (o <= cant_encuentros_por_fecha) {
+                //console.log(listaEquipos1[o].nombre + " vs " + listaEquipos1[++o].nombre);
+                list += `<li class="list-group-item list-group-item-primary">${listaEquipos1[o].nombre + " vs " + listaEquipos1[++o].nombre}</li>`;
+
+
+                o++;
+            }
+
+            $(`#mostrar_campeonato`).append(`<div class="card text-white bg-info mb-3" id="fecha" style="max-width: 18rem;">
+                                             <div class="card-header">Fecha ${fecha}</div>
+                                                <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <ol>
+                                                        ${list}
+                                                    </ol>
+                                                </h5>
+                                                
+                                            </div>
+                                        </div>`);
+
+
+            o = 0;
+            let a = listaEquipos1.pop();
+            listaEquipos1.unshift(a);
+        } 
+       
+
+    
+
+
+
+    }
+    else {
+            $('#notificacion').append(`<div class="alert alert-danger" role="alert">
+                                            Cargue un numero par de equipos
+                                        </div>`);
+
+            $('#notificacion').fadeOut(5000);
+        
+    }
+
 }
