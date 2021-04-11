@@ -75,7 +75,7 @@ $('#boton').on('click', function () {
     mostarEquipos(equipos);
     $('#carta').hide();
     $('#carta').fadeIn(1000);
-
+    console.log(equipos);
     sessionStorage.setItem('eqIngresados', JSON.stringify(equipos));
     $('#datos').val('');
     //$('#equipo').hide();
@@ -84,8 +84,9 @@ $('#boton').on('click', function () {
 if (location.href.includes("jugadores.html")) {
 
     let eqs = JSON.parse(sessionStorage.getItem('eqIngresados'));
-    if (localStorage.getItem("eqIngresados") != null) {
-    
+    console.log(eqs);
+    if (sessionStorage.getItem("eqIngresados") != null) {
+
         for (const eq of eqs) {
             console.log(eq.nombre);
             equipos.push(new Equipo(eq.nombre, eq.jugadores));
@@ -94,7 +95,6 @@ if (location.href.includes("jugadores.html")) {
 
 
     mostarEquiposJ(equipos);
-
     //crearInputJugadores(equipos);
 }
 
@@ -121,57 +121,77 @@ if (location.href.includes("campeonato.html")) {
 }
 const URLGET = "http://hp-api.herokuapp.com/api/characters/students";
 $(`#armar_equipo`).click(() => {
-    $.get(URLGET, function(respuesta,estado){
-        if(estado === "success"){
+    $.get(URLGET, function (respuesta, estado) {
+        if (estado === "success") {
             let misDatos = respuesta;
             let equipos = [];
             let fequipos = [];
             let nequipos = [];
 
-            
-            for (const dato of misDatos) {
-                
-                equipos.push(new Equipo(dato.house, []));
-                nequipos.push( dato.house);
-         
-            }
-        nequipos = nequipos.sort();
-            console.log(nequipos);
-            
-            for (let i  = 0; i  < equipos.length; i ++) {
-                a = i -1;
-                if(a < 0) {
-                    a = 0;
-                    fequipos.push(new Equipo( nequipos[i], []));
 
-                }   
+            for (const dato of misDatos) {
+
+                equipos.push(new Equipo(dato.house, []));
+                nequipos.push(dato.house);
+
+            }
+            nequipos = nequipos.sort();
+            console.log(nequipos);
+
+            for (let i = 0; i < equipos.length; i++) {
+                a = i - 1;
+                if (a < 0) {
+                    a = 0;
+                    fequipos.push(new Equipo(nequipos[i], []));
+
+                }
 
                 // if( equipos[a].nombre != equipos[i].nombre) {
-                if( nequipos[a] != nequipos[i]) {
-                        let jugadores = [];
-                        fequipos.push(new Equipo( nequipos[i], []));
-                    }   
+                if (nequipos[a] != nequipos[i]) {
+                    let jugadores = [];
+                    fequipos.push(new Equipo(nequipos[i], []));
                 }
-            console.log(equipos);  
+            }
+            console.log(equipos);
             console.log(fequipos);
-             for (const dato of misDatos) {
-                 for (const equipo of fequipos) {
-                     if(equipo.nombre === dato.house) {
-                         //mostarEquiposArmados(equipo, dato.name)
-                          equipo.jugadores.push(new Jugador(dato.name, false));
-                     }
-                     
-                 }
-             }
-             console.log(fequipos);
+            for (const dato of misDatos) {
+                for (const equipo of fequipos) {
+                    if (equipo.nombre === dato.house) {
+                        //mostarEquiposArmados(equipo, dato.name)
+                        equipo.jugadores.push(new Jugador(dato.name, false));
+                    }
+
+                }
+            }
+            console.log(fequipos);
 
 
-            mostarEquiposArmados(fequipos);  
-          }
+            mostarEquiposArmados(fequipos);
+        }
 
 
     });
 });
+//Declaramos la url que vamos a usar para el GET
+const URLPOST = "https://jsonplaceholder.typicode.com/posts"
+//Declaramos la información a enviar
+const infoPost = {
+    nombre: "Ana",
+    profesion: "Programadora"
+}
+//Agregamos un botón con jQuery
+$("body").prepend('<button id="btn1">POST</button>');
+//Escuchamos el evento click del botón agregado
+$("#btn1").click(() => {
+    $.post(URLPOST, infoPost, (respuesta, estado) => {
+        if (estado === "success") {
+            $("body").prepend(`<div>
+Guardado:${respuesta.nombre}
+</div>`);
+        }
+    });
+});
+
 //#endregion
 
 function crearInputJugadores(equipos) {
@@ -241,16 +261,28 @@ function mostarEquiposJ(equipos) {
                 $(`#lista-jugadores-${equipo.nombre}`).append(agregarJugadorEquipo(equipo, $(`#inputJugador-${equipo.nombre}`).val()));
                 $("li").fadeIn();
                 $(`#inputJugador-${equipo.nombre}`).val("");
+
+               
+
+                $.post(URLPOST, infoPost,(respuesta, estado) => {
+                    if(estado === "success") {
+                        console.log("guardado");
+                        //$(`#li-${jugador}`).append(`<span class="badge badge-success">Guardado</span>`)
+
+
+                    }
+                } );
             }
         });
 
     }
 
 }
+
 function mostarEquiposArmados(equipos) {
 
-for (const equipo of equipos) {
-    $('#agregar_jugadores').append(`<div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
+    for (const equipo of equipos) {
+        $('#agregar_jugadores').append(`<div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
                                         <div class="card-header"><h1>${equipo.nombre.toUpperCase()}</h1></div>
                                              <div class="card-body">
                                              <div class="input-group mb-3">
@@ -265,28 +297,28 @@ for (const equipo of equipos) {
                                                 </ul>
                                              </div>
                                         </div>`);
-            for (const jugador of equipo.jugadores) {
-                $(`#lista-jugadores-${equipo.nombre}`).append(`<li class="list-group-item list-group-item-warning">${jugador.nombre}</li>`);
-                
-            } 
-    
-}
-        
-        // $(`#botonJugador-${equipo.nombre}`).on('click', function () {
-           
-            $("li").hide();
-            $("li").fadeIn();
-            $(`#inputJugador-${equipo.nombre}`).val("");
-            // }
+        for (const jugador of equipo.jugadores) {
+            $(`#lista-jugadores-${equipo.nombre}`).append(`<li class="list-group-item list-group-item-warning">${jugador.nombre}</li>`);
 
-    
+        }
+    }
+
+    // $(`#botonJugador-${equipo.nombre}`).on('click', function () {
+
+    $("li").hide();
+    $("li").fadeIn();
+    $(`#inputJugador-${equipo.nombre}`).val("");
+    // }
+
+
 
 }
 
 function agregarJugadorEquipo(equipo, jugador) {
 
     equipo.jugadores.push(new Jugador(jugador, false));
-    return `<li class="list-group-item list-group-item-warning">${jugador}</li>`
+    //agregar jugador
+    return `<li class="list-group-item list-group-item-warning" id="li-${jugador}">${jugador}</li>`
 
 
 }
