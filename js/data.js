@@ -1,0 +1,20 @@
+const DATOSAPP = [{"nombre":"Wiza"},
+{"nombre":"Kertzmann"},
+{"nombre":"Senger-Eichmann"},
+{"nombre":"Sanford-Lindgren"},
+{"nombre":"Kris"},
+{"nombre":"Labadie Group"},
+{"nombre":"Mosciski"},
+{"nombre":"Schroeder"},
+{"nombre":"Denesik-Huel"}];
+
+const CANCHAS = [{"id":1,"nombre":"Brazilian tapir","reservado":false},
+{"id":2,"nombre":"Dove, emerald-spotted wood","reservado":false},
+{"id":3,"nombre":"Sifaka, verreaux's","reservado":true},
+{"id":4,"nombre":"Spoonbill, european","reservado":true},
+{"id":5,"nombre":"Cockatoo, roseate","reservado":false},
+{"id":6,"nombre":"Crab, sally lightfoot","reservado":true},
+{"id":7,"nombre":"Four-striped grass mouse","reservado":true},
+{"id":8,"nombre":"Killer whale","reservado":true},
+{"id":9,"nombre":"European spoonbill","reservado":false},
+{"id":10,"nombre":"Comb duck","reservado":false}];
